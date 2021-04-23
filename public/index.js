@@ -1,20 +1,14 @@
 let transactions = [];
-console.log(
-  "transactions variable at index.js program start is " + transactions
-);
+
 let myChart;
 
-fetch("/api/transaction")
+fetch("/api/transactions")
   .then((response) => {
     return response.json();
   })
 
   .then((data) => {
     transactions = data;
-    console.log(
-      "transactions variable after inital server call for transactions at index.js program start is " +
-        transactions
-    );
 
     populateTotal();
     populateTable();
@@ -44,9 +38,7 @@ request.onerror = function (event) {
 };
 
 function saveRecord(record) {
-  console.log(
-    "indexedDB saveRecord initiated to save as " + JSON.stringify(record)
-  );
+  console.log("indexedDB saveRecord initiated: " + JSON.stringify(record));
 
   const transaction = db.transaction(["pending"], "readwrite");
 
@@ -56,7 +48,7 @@ function saveRecord(record) {
 }
 
 function checkDatabase() {
-  console.log("checked db");
+  console.log("Checked database");
   const transaction = db.transaction(["pending"], "readwrite");
   const store = transaction.objectStore("pending");
   const getAll = store.getAll();
@@ -197,9 +189,7 @@ function sendTransaction(isAdding) {
     })
 
     .catch((err) => {
-      console.log(
-        "send transaction to server failed (expected if offline) trigger indexedDB"
-      );
+      console.log(err);
 
       saveRecord(transaction);
 

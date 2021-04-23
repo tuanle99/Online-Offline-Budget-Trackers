@@ -37,11 +37,8 @@ self.addEventListener("activate", function (evt) {
 });
 
 self.addEventListener("fetch", function (evt) {
-  if (evt.request.url.includes("/api/transactionS")) {
-    console.log(
-      "[Service Worker] intercepted request to path ",
-      evt.request.url
-    );
+  if (evt.request.url.includes("/api/transactions")) {
+    console.log("Service Worker intercepted request to path ", evt.request.url);
 
     evt.respondWith(
       caches
@@ -51,18 +48,14 @@ self.addEventListener("fetch", function (evt) {
             .then((response) => {
               if (response.status === 200) {
                 cache.put(evt.request.url, response.clone());
-                console.log(
-                  "request to server successful, request cloned to cache"
-                );
+                console.log("request to server successful");
               }
 
               return response;
             })
 
             .catch((err) => {
-              console.log(
-                "request to server failed, pulling last cloned response from cache"
-              );
+              console.log("request to server failed");
 
               return cache.match(evt.request);
             });
